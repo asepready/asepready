@@ -8,4 +8,4 @@
 </p>
 
 ## Catatan Belajar
-1. [Belajar FreeBSD](https://github.com/asepready/belajar-freebsd)(https://github.com/asepready/belajar-freebsd)
+1. [Belajar FreeBSD --> https://github.com/asepready/belajar-freebsd](https://github.com/asepready/belajar-freebsd)
