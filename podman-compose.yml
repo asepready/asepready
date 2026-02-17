@@ -1,0 +1,87 @@
+version: '3.8'
+
+services:
+  # MariaDB Database
+  database:
+    image: docker.io/library/mariadb:11-alpine
+    container_name: sysadmin-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: sysadmin_portfolio
+      MYSQL_USER: sysadmin
+      MYSQL_PASSWORD: sysadmin_password
+      TZ: Asia/Jakarta
+    volumes:
+      - mariadb_data:/var/lib/mysql
+      - ./deployment/mariadb/init:/docker-entrypoint-initdb.d:ro
+    ports:
+      - "3306:3306"
+    networks:
+      - sysadmin-network
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # Backend API (Golang)
+  backend:
+    build:
+      context: .
+      dockerfile: deployment/Containerfile.backend
+    container_name: sysadmin-backend
+    restart: unless-stopped
+    environment:
+      PORT: 8080
+      ENV: production
+      DB_HOST: database
+      DB_PORT: 3306
+      DB_USER: sysadmin
+      DB_PASSWORD: sysadmin_password
+      DB_NAME: sysadmin_portfolio
+      JWT_SECRET: your-super-secret-key-change-this-in-production
+      JWT_EXPIRE: 24h
+      ALLOWED_ORIGINS: http://localhost:3000
+    ports:
+      - "8080:8080"
+    depends_on:
+      database:
+        condition: service_healthy
+    networks:
+      - sysadmin-network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+
+  # Frontend (Vue.js + Nginx)
+  frontend:
+    build:
+      context: .
+      dockerfile: deployment/Containerfile.frontend
+    container_name: sysadmin-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:8080"
+    depends_on:
+      - backend
+    networks:
+      - sysadmin-network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+
+volumes:
+  mariadb_data:
+    driver: local
+
+networks:
+  sysadmin-network:
+    driver: bridge
