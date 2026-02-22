@@ -1,3 +1,0 @@
-Catatan:
-
-"Saya ingin membuat website personal branding untuk SysAdmin menggunakan backend(Golang/Mariadb) dan frontend(vue.js). Buatkan langkah-langkah(referensi dari file Todo.md) command line untuk inisialisasi proyek, instalasi tema minimalis yang cepat, dan struktur folder yang rapi berdasarkan dokumentasi resmi. Saya ingin dideploy di container podman dengan basis image alpine."
