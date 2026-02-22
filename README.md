@@ -37,14 +37,14 @@ Saya **Asep Ready** — suka belajar hal baru, eksplorasi teknologi, dan membang
 
 <p align="center">
   <a href="https://github.com/asepready">
-    <img height="180em" src="https://github-readme-stats-eight-theta.vercel.app/api?username=asepready&show_icons=true&theme=midnight-purple&include_all_commits=true" alt="GitHub Stats"/>
-    <img height="180em" src="https://github-readme-stats-eight-theta.vercel.app/api/top-langs/?username=asepready&layout=compact&langs_count=8&theme=midnight-purple" alt="Top Languages"/>
+    <img height="180em" src="https://github-readme-stats.vercel.app/api?username=asepready&show_icons=true&theme=midnight-purple&include_all_commits=true" alt="GitHub Stats"/>
+    <img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=asepready&layout=compact&langs_count=8&theme=midnight-purple" alt="Top Languages"/>
   </a>
 </p>
 
-<!-- Streak -->
+<!-- Streak (Vercel/demolab - Heroku sering gagal load) -->
 <p align="center">
-  <img src="https://github-readme-streak-stats.herokuapp.com/?user=asepready&theme=midnight-purple" alt="GitHub Streak"/>
+  <img src="https://streak-stats.demolab.com/?user=asepready&theme=midnight-purple" alt="GitHub Streak"/>
 </p>
 
 <!-- Trophy -->
