@@ -37,8 +37,8 @@ Saya **Asep Ready** — suka belajar hal baru, eksplorasi teknologi, dan membang
 
 <p align="center">
   <a href="https://github.com/asepready">
-    <img height="180em" src="https://github-readme-stats.vercel.app/api?username=asepready&show_icons=true&theme=midnight-purple&include_all_commits=true&count_private=true" alt="GitHub Stats"/>
-    <img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=asepready&layout=compact&langs_count=8&theme=midnight-purple" alt="Top Languages"/>
+    <img height="180em" src="https://github-readme-stats-eight-theta.vercel.app/api?username=asepready&show_icons=true&theme=midnight-purple&include_all_commits=true" alt="GitHub Stats"/>
+    <img height="180em" src="https://github-readme-stats-eight-theta.vercel.app/api/top-langs/?username=asepready&layout=compact&langs_count=8&theme=midnight-purple" alt="Top Languages"/>
   </a>
 </p>
 
@@ -49,7 +49,7 @@ Saya **Asep Ready** — suka belajar hal baru, eksplorasi teknologi, dan membang
 
 <!-- Trophy -->
 <p align="center">
-  <img src="https://github-profile-trophy.vercel.app/?username=asepready&theme=radical&no-frame=true&row=1&column=7" alt="GitHub Trophy"/>
+  <img src="https://github-profile-trophy.vercel.app/?username=asepready&theme=onedark&no-frame=true&row=1" alt="GitHub Trophy"/>
 </p>
 
 ---
