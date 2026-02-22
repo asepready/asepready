@@ -51,9 +51,11 @@ Saya **Asep Ready** — suka belajar hal baru, eksplorasi teknologi, dan membang
   <img src="https://streak-stats.demolab.com/?user=asepready&theme=midnight-purple" alt="GitHub Streak"/>
 </p>
 
-<!-- Trophy -->
+<!-- Trophy (placeholder lokal; API Vercel sering gagal) -->
 <p align="center">
-  <img src="https://github-profile-trophy.vercel.app/?username=asepready&theme=onedark&no-frame=true&row=1" alt="GitHub Trophy"/>
+  <a href="https://github-profile-trophy.vercel.app/?username=asepready&theme=onedark&no-frame=true&row=1">
+    <img src="./profile/trophy.svg" alt="GitHub Trophy"/>
+  </a>
 </p>
 
 ---
