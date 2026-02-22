@@ -1,7 +1,10 @@
 <div align="center">
 
+<!-- 2026 badge -->
+<img src="https://img.shields.io/badge/2026-Profile-7c3aed?style=for-the-badge&labelColor=1e1b4b" alt="2026" />
+
 <!-- Typing effect header -->
-<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=28&duration=4000&pause=1000&color=A855F7&center=true&vCenter=true&random=false&width=520&lines=Hi+%F0%9F%91%8B+Saya+Asep+Ready;Developer+%7C+Tech+Enthusiast+%7C+Learner;Welcome+to+my+GitHub+Profile+%F0%9F%8E%A8" alt="Typing SVG" />
+<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=28&duration=4000&pause=1000&color=A855F7&center=true&vCenter=true&random=false&width=520&lines=Hi+%F0%9F%91%8B+Saya+Asep+Ready;Developer+%7C+Tech+Enthusiast+%7C+Learner;Building+in+2026+%F0%9F%8E%A8" alt="Typing SVG" />
 
 <!-- Profile views -->
 <img src="https://komarev.com/ghpvc/?username=asepready&label=Profile%20views&color=7c3aed&style=flat-square" alt="Profile views" />
@@ -35,10 +38,11 @@ Saya **Asep Ready** — suka belajar hal baru, eksplorasi teknologi, dan membang
 
 ### 📊 GitHub Stats
 
+<!-- Card di-generate oleh GitHub Action (profile/stats.svg, profile/top-langs.svg) supaya icon tidak gagal load -->
 <p align="center">
   <a href="https://github.com/asepready">
-    <img height="180em" src="https://github-readme-stats.vercel.app/api?username=asepready&show_icons=true&theme=midnight-purple&include_all_commits=true" alt="GitHub Stats"/>
-    <img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=asepready&layout=compact&langs_count=8&theme=midnight-purple" alt="Top Languages"/>
+    <img height="180em" src="./profile/stats.svg" alt="GitHub Stats"/>
+    <img height="180em" src="./profile/top-langs.svg" alt="Top Languages"/>
   </a>
 </p>
 
@@ -85,6 +89,6 @@ _Tambah repo andalan lain di tabel ini._
 
 ---
 
-<sub>⭐ From asepready with care</sub>
+<sub>⭐ From asepready with care · 2026</sub>
 
 </div>
