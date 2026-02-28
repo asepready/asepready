@@ -242,6 +242,75 @@ Dengan ini FreeBSD 15 di board bisa diarahkan untuk peran seperti router kecil, 
 
 ---
 
+## Setup Rust
+
+Rust cocok untuk Orange Pi Zero LTS: binary standalone, tidak butuh runtime di board, dan pemakaian memori saat jalan umumnya kecil. Ada dua pendekatan: (1) instal Rust langsung di board, atau (2) **cross-compile di PC lalu deploy binary ke board** (disarankan untuk hemat RAM 256/512 MB).
+
+### Opsi 1: Rust di board (langsung di Orange Pi)
+
+Jika Anda ingin compile di board itu sendiri:
+
+```bash
+# Install Rust lewat paket FreeBSD
+pkg install rust
+# Cek: cargo --version
+```
+
+Target native: host sudah armv7-freebsd, cukup jalankan:
+
+```bash
+cargo build --release
+```
+
+Anda juga bisa memakai [rustup](https://rustup.rs) jika tersedia untuk FreeBSD armv7 (cek platform support di situs rustup). **Peringatan:** compile di board memakan banyak RAM dan waktu; untuk RAM 256 MB lebih aman memakai cross-compile (Opsi 2).
+
+### Opsi 2: Cross-compile dari PC (disarankan)
+
+Develop di mesin PC (FreeBSD amd64, Linux, atau Windows), build untuk target armv7-freebsd, lalu copy binary ke board.
+
+1. **Instal Rust di PC** (misalnya lewat [rustup](https://rustup.rs)).  
+2. **Tambah target** untuk FreeBSD armv7 (jika tersedia di rustup):
+   ```bash
+   rustup target add armv7-unknown-freebsd
+   ```
+   Jika target belum ada, mungkin perlu [custom target](https://doc.rust-lang.org/rustc/targets/custom.html) atau toolchain dari komunitas.  
+3. **Toolchain/linker untuk armv7-freebsd:** agar linking ke libc FreeBSD armv7 berhasil, Anda butuh linker dan sysroot (misalnya dari build FreeBSD source dengan `TARGET_ARCH=armv7`, atau sysroot yang disediakan komunitas). Set variabel lingkungan, contoh:
+   ```bash
+   export CC=armv7-unknown-freebsd-clang
+   export AR=armv7-unknown-freebsd-ar
+   export CARGO_TARGET_ARMV7_UNKNOWN_FREEBSD_LINKER=armv7-unknown-freebsd-clang
+   ```
+   (Nilai persis tergantung cara Anda memasang cross-toolchain.)  
+4. **Build:**
+   ```bash
+   cargo build --release --target armv7-unknown-freebsd
+   ```
+5. **Deploy ke board** (ganti `user`, `opi`, dan path sesuai lingkungan Anda):
+   ```bash
+   scp target/armv7-unknown-freebsd/release/nama_binary user@opi:/usr/local/bin/
+   ```
+
+### Contoh konfigurasi cross-compile (`.cargo/config.toml`)
+
+Di root proyek Rust Anda, buat atau edit `.cargo/config.toml`:
+
+```toml
+[target.armv7-unknown-freebsd]
+linker = "armv7-unknown-freebsd-clang"
+# Atau path penuh ke linker dari FreeBSD cross-build, misalnya:
+# linker = "/path/to/sysroot/bin/armv7-unknown-freebsd-clang"
+```
+
+Sesuaikan `linker` dengan linker yang Anda pakai (dari FreeBSD source build atau paket cross-compiler).
+
+### Referensi Rust
+
+- [rustup.rs](https://rustup.rs) — instalasi Rust dan manajemen target.  
+- [Rust platform support](https://doc.rust-lang.org/nightly/rustc/platform-support.html) — daftar target resmi.  
+- Target **armv7-unknown-freebsd** atau toolchain FreeBSD armv7 mungkin perlu disiapkan dari [FreeBSD source](https://git.freebsd.org/src) (cross-build) atau sumber komunitas.
+
+---
+
 ## Referensi resmi
 
 | Sumber | URL | Isi |
