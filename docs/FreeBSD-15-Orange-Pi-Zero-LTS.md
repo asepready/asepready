@@ -146,6 +146,150 @@ Tetap pakai **`u-boot-orangepi-zero`** seperti di Opsi A; tidak perlu build U-Bo
 
 ---
 
+## Rancangan build custom FreeBSD (optimal Orange Pi Zero LTS)
+
+Bagian ini menguraikan **rancangan (design)** untuk membangun FreeBSD versi kustom yang dioptimalkan untuk Orange Pi Zero LTS: kernel yang dipangkas (hanya device/fitur yang dipakai di H3), world minimal (tanpa X, dokumentasi berat, dll.), dan alur dari source sampai image SD yang siap boot.
+
+**Tujuan:** Ukuran image dan pemakaian RAM lebih kecil; target **armv7**, board **Orange Pi Zero LTS** (Allwinner H3).
+
+### Alur build (ringkas)
+
+```mermaid
+flowchart LR
+  subgraph persiapan [Persiapan]
+    Source[Source tree]
+    KERNCONF[Kernel config]
+    src_conf[src.conf]
+  end
+  subgraph build [Build]
+    buildworld[buildworld]
+    buildkernel[buildkernel]
+  end
+  subgraph paket [Packaging]
+    DESTDIR[DESTDIR]
+    Image[Image / SD]
+  end
+  subgraph deploy [Deploy]
+    UBoot[U-Boot]
+    Boot[Boot di board]
+  end
+  Source --> KERNCONF
+  Source --> src_conf
+  KERNCONF --> buildkernel
+  src_conf --> buildworld
+  buildworld --> DESTDIR
+  buildkernel --> DESTDIR
+  DESTDIR --> Image
+  Image --> UBoot
+  UBoot --> Boot
+```
+
+### 1. Mesin build
+
+- **OS:** FreeBSD 14 atau 15 amd64 (PC atau VM).
+- **Resource:** Disk ~20–50 GB, RAM 4 GB+.
+- **Paket:** `pkg install git gmake`.
+- **Source:** Clone ke `/usr/src`, branch `release/15.0.0` atau `releng/15.0` (lihat [Opsi B](#opsi-b-build-dari-source-freebsd-15)).
+
+### 2. Kernel kustom (KERNCONF)
+
+Buat file konfigurasi kernel baru di `sys/arm/conf/` (mis. **ORANGEPIZERO**) berdasarkan GENERIC:
+
+- **Pertahankan:** FDT/DTB Allwinner H3, MMC/SD, Ethernet, USB, UART, GPIO, GEOM_PART.
+- **Buang/nonaktifkan:** device atau option yang tidak ada di H3 (mis. PCI tertentu, GPU berat).
+
+Contoh lokasi dan perintah:
+
+```bash
+cd /usr/src/sys/arm/conf
+cp GENERIC ORANGEPIZERO
+# Edit ORANGEPIZERO: sesuaikan ident, fdt (sun8i-h3-orangepi-zero.dts), dan device list
+```
+
+Build kernel:
+
+```bash
+cd /usr/src
+make buildkernel KERNCONF=ORANGEPIZERO TARGET_ARCH=armv7
+```
+
+Referensi: [config(5)](https://man.freebsd.org/cgi/man.cgi?query=config).
+
+### 3. World minimal (src.conf)
+
+Buat file **src.conf** (atau set `SRCCONF`) agar base system lebih kecil. Contoh:
+
+```makefile
+# Contoh untuk board headless
+WITHOUT_X11=yes
+WITHOUT_LLVM=yes
+WITHOUT_LLD=yes
+WITHOUT_CLANG=yes
+WITHOUT_GAMES=yes
+WITHOUT_MAN=yes
+WITHOUT_INFO=yes
+WITHOUT_EXAMPLES=yes
+```
+
+Build world:
+
+```bash
+cd /usr/src
+make buildworld TARGET_ARCH=armv7
+```
+
+### 4. DTB (Device Tree)
+
+Pastikan DTB untuk Orange Pi Zero (H3) ikut ter-install. Nama DTB di kernel config (mis. `sun8i-h3-orangepi-zero.dts`) harus sesuai; `make installkernel` akan mengopi DTB ke `DESTDIR/boot/dtb/`. Lihat juga [Device tree (DTB) H3 / Orange Pi Zero](#3-device-tree-dtb-h3--orange-pi-zero) di Opsi B.
+
+### 5. Install ke DESTDIR
+
+```bash
+export DESTDIR=/tmp/opiroot
+mkdir -p $DESTDIR
+make installworld TARGET_ARCH=armv7 DESTDIR=$DESTDIR
+make distribution TARGET_ARCH=armv7 DESTDIR=$DESTDIR
+make installkernel KERNCONF=ORANGEPIZERO TARGET_ARCH=armv7 DESTDIR=$DESTDIR
+```
+
+Isi `$DESTDIR` dipakai sebagai root filesystem untuk partisi UFS di SD atau untuk membuat image.
+
+### 6. Image / partisi SD
+
+Dua pendekatan:
+
+- **Opsi (a):** Buat image file (layout partisi + UFS + boot), lalu tulis ke SD dengan `dd`.
+- **Opsi (b):** Siapkan SD langsung: `gpart` (MBR), partisi FAT (untuk loader) + UFS (root), `newfs` pada partisi UFS, mount, copy isi `$DESTDIR` ke partisi root, dan salin loader ke partisi FAT (`EFI/boot/bootarm.efi`).
+
+Tetap diperlukan: partisi FAT untuk loader dan U-Boot di sector awal (layout seperti di [Allwinner booting](https://wiki.freebsd.org/arm/Allwinner/booting)).
+
+### 7. U-Boot
+
+Tidak di-build dalam rancangan ini. Pakai **u-boot-orangepi-zero** dari port/paket seperti di [Opsi A](#opsi-a-install-dari-image-resmi-paling-sederhana); tulis ke SD dengan:
+
+```bash
+dd if=/usr/local/share/u-boot/u-boot-orangepi-zero/u-boot-sunxi-with-spl.bin conv=notrunc,sync of=/dev/da0 bs=1k seek=8
+```
+
+### Ringkasan langkah
+
+1. Clone/checkout source FreeBSD 15 (arm).
+2. Buat KERNCONF (mis. ORANGEPIZERO) dan src.conf.
+3. `make buildworld` dan `make buildkernel KERNCONF=ORANGEPIZERO` untuk `TARGET_ARCH=armv7`.
+4. `installworld`, `distribution`, `installkernel` ke DESTDIR.
+5. Siapkan image atau partisi SD; isi root dari DESTDIR dan atur loader di partisi FAT.
+6. Tulis U-Boot ke SD (`dd ... bs=1k seek=8`).
+7. Boot Orange Pi Zero LTS dari SD.
+
+### Referensi rancangan
+
+- [FreeBSD Handbook – Building from source](https://docs.freebsd.org/en/books/handbook/cutting-edge/).
+- [FreeBSD Wiki – Allwinner / H3](https://wiki.freebsd.org/arm/Allwinner/H3).
+- Script release ARM: `src/release/arm` di source tree.
+- U-Boot dan layout SD: [Allwinner booting](https://wiki.freebsd.org/arm/Allwinner/booting); instalasi image dan U-Boot di dokumen ini (Opsi A, Opsi B).
+
+---
+
 ## Optimalisasi FreeBSD 15 di board (Orange Pi Zero LTS)
 
 Setelah instalasi, konfigurasi berikut membantu FreeBSD 15 berjalan optimal di Orange Pi Zero LTS (RAM 256/512 MB, penyimpanan SD).
