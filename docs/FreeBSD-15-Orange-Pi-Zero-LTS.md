@@ -453,6 +453,17 @@ Sesuaikan `linker` dengan linker yang Anda pakai (dari FreeBSD source build atau
 - [Rust platform support](https://doc.rust-lang.org/nightly/rustc/platform-support.html) — daftar target resmi.  
 - Target **armv7-unknown-freebsd** atau toolchain FreeBSD armv7 mungkin perlu disiapkan dari [FreeBSD source](https://git.freebsd.org/src) (cross-build) atau sumber komunitas.
 
+### Contoh layanan: my-api
+
+Sebagai **contoh layanan ringan** di proyek ini (mis. untuk Sprint 4 dalam [rancangan Agile/Scrum](Agile-Scrum-Penelitian-FreeBSD-Orange-Pi-Zero-LTS.md)), Anda dapat mengimplementasikan API minimal yang melayani **GET /my-api**.
+
+- **Perilaku:** Endpoint **GET /my-api** mengembalikan JSON, misalnya status, uptime, atau info board (hostname, memori). Cocok untuk health-check atau integrasi dengan monitoring.
+- **Implementasi:** Satu binary Rust (atau C) yang listen di satu port (mis. 8080); route `/my-api` mengembalikan `Content-Type: application/json` dan body JSON. Deploy ke board lewat cross-compile + `scp`; jalankan sebagai daemon (rc.d) atau manual.
+- **Contoh respons (ilustrasi):** `{"status":"ok","uptime_sec":123,"board":"Orange Pi Zero LTS"}`.
+- **Pengukuran:** Setelah berjalan, catat pemakaian RAM/CPU (mis. `top` atau `procstat`) untuk dokumentasi penelitian dan rekomendasi batasan resource.
+
+Implementasi contoh ada di **[examples/my-api](../examples/my-api/)** (proyek Rust, tanpa dependency eksternal). Dengan ini **/my-api** menjadi contoh nyata layanan yang bisa diandalkan di spek Orange Pi Zero LTS (FreeBSD 15, Rust).
+
 ---
 
 ## Referensi resmi
