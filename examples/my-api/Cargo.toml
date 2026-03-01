@@ -1,0 +1,8 @@
+[package]
+name = "my-api"
+version = "0.1.0"
+edition = "2021"
+description = "Minimal API example: GET /my-api returns JSON (status, uptime, board) for Orange Pi Zero LTS"
+
+[dependencies]
+# No external deps — std only for easy cross-compile to armv7-freebsd
