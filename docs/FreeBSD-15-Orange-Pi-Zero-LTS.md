@@ -470,6 +470,7 @@ Implementasi contoh ada di **[examples/my-api](../examples/my-api/)** (proyek Ru
 
 | Sumber | URL | Isi |
 |--------|-----|-----|
+| **Pengamanan FreeBSD (gaya OpenBSD)** | [FreeBSD-Hardening-OpenBSD-Style.md](FreeBSD-Hardening-OpenBSD-Style.md) | Firewall pf, SSH, sysctl, update, jails, checklist keamanan |
 | FreeBSD ARM Allwinner | [wiki.freebsd.org/arm/Allwinner](https://wiki.freebsd.org/arm/Allwinner) | Daftar board (termasuk Orange Pi Zero), SoC, cara build image |
 | FreeBSD H3 boards | [wiki.freebsd.org/arm/Allwinner/H3](https://wiki.freebsd.org/arm/Allwinner/H3) | Daftar board H3 (Orange Pi Zero termasuk) |
 | Allwinner booting (U-Boot) | [wiki.freebsd.org/arm/Allwinner/booting](https://wiki.freebsd.org/arm/Allwinner/booting) | Layout SD, perintah dd U-Boot, daftar port U-Boot (termasuk u-boot-orangepi-zero) |

@@ -134,5 +134,6 @@ flowchart LR
 ## 7. Referensi
 
 - **Panduan teknis:** [FreeBSD-15-Orange-Pi-Zero-LTS.md](FreeBSD-15-Orange-Pi-Zero-LTS.md) — instalasi, build, optimalisasi, Rust, rancangan custom build.
+- **Pengamanan FreeBSD:** [FreeBSD-Hardening-OpenBSD-Style.md](FreeBSD-Hardening-OpenBSD-Style.md) — firewall, SSH, sysctl, update, jails, checklist keamanan.
 - **FreeBSD:** [FreeBSD Documentation Portal](https://docs.freebsd.org/en/), [FreeBSD Handbook](https://docs.freebsd.org/en/books/handbook/).
 - **Hardware / ARM:** [FreeBSD Wiki – Allwinner / H3](https://wiki.freebsd.org/arm/Allwinner/H3).

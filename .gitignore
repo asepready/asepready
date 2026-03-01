@@ -1,0 +1,24 @@
+# Env dengan secret — jangan commit
+.env
+.env.local
+.env.development
+.env.staging
+.env.production
+.env.*.local
+
+# Rust
+/target/
+**/*.rs.bk
+
+# Data lokal (SQLite, dll.)
+/data/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
